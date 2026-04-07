@@ -20,7 +20,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.rest-assured:rest-assured:6.0.0'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
