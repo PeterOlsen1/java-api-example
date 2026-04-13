@@ -13,3 +13,7 @@ export PATH="$JAVA_HOME/bin:$PATH"
     * You would also see openjdk 17.0.18 if you run `java --version`, where a different terminal would display the version 11 we use for class
 
 * Once this is complete, cd into `spring-app` and run `./gradlew bootRun` to start the app on port 8080
+
+### RestAssured usage
+
+* Update your `build.gradle` to have the following line: `testImplementation 'io.rest-assured:rest-assured:6.0.0'`
