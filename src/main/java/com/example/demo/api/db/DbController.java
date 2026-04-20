@@ -3,6 +3,9 @@ package com.example.demo.api.db;
 import java.util.Map;
 import java.util.HashMap;
 import java.time.Instant;
+
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -61,21 +64,38 @@ public class DbController {
     }
 
     @DeleteMapping("/db/del")
-    public Map<String, String> handleDbDel(@RequestParam(defaultValue = "") String key) {
+    public ResponseEntity<Map<String, String>> handleDbDel(@RequestParam(defaultValue = "") String key) {
         // 400 for invalid request
         if (key.isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing 'key' parameter");
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Missing 'key' parameter"));
+        }
+        if (!this.internalDb.containsKey(key)){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "No such key exists"));
         }
 
+
         this.internalDb.remove(key);
-        return Map.of(
+        return ResponseEntity.ok(Map.of(
             "status", "success",
             "timestamp", Instant.now().toString()
-        );
+        ));
     }
 
     @GetMapping("/db/getAll")
-    public Map<String, String> handleDbGetAll() {
+    public Map<String, String> handleDbGetAll(){
         return this.internalDb;
+    }
+
+    @GetMapping("db/getDbSize")
+    public ResponseEntity<Map<String, Object>> getDbSize(){
+        return ResponseEntity.ok(Map.of(
+                "status", "success",
+                "timestamp", Instant.now().toString(),
+                "message", String.format("Size of the Internal DB: %d", this.internalDb.size())
+        ));
     }
 }
