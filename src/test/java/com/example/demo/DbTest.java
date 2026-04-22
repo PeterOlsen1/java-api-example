@@ -6,11 +6,12 @@ import static org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.Test;
 
 class ApiTest {
+    String baseApplicationURI = "http://localhost:8080/";
 
     @Test
     void testGetDbSizeOfZero(){
         given()
-                .baseUri("http://localhost:8080/")
+                .baseUri(baseApplicationURI)
         .when()
                 .get("/db/getDbSize")
         .then()
@@ -20,7 +21,7 @@ class ApiTest {
     @Test
     void testGetSends400WithNoRequestParameter() {
         given()
-            .baseUri("http://localhost:8080/")
+            .baseUri(baseApplicationURI)
         .when()
             .get("/db/get")
         .then()
@@ -30,7 +31,7 @@ class ApiTest {
     @Test
     void testGetSends404OnMissingKey() {
         given()
-            .baseUri("http://localhost:8080/")
+            .baseUri(baseApplicationURI)
         .when()
             .get("/db/get?key=testing")
         .then()
@@ -40,14 +41,14 @@ class ApiTest {
     @Test
     void testSetFailsWithMissingParameters() {
         given()
-            .baseUri("http://localhost:8080/")
+            .baseUri(baseApplicationURI)
         .when()
             .put("/db/set")
         .then()
             .statusCode(400);
 
         given()
-            .baseUri("http://localhost:8080/")
+            .baseUri(baseApplicationURI)
             .body("{\"value\":\"someValue\"}")
             .contentType("application/json")
         .when()
@@ -56,7 +57,7 @@ class ApiTest {
             .statusCode(400);
 
         given()
-            .baseUri("http://localhost:8080/")
+            .baseUri(baseApplicationURI)
             .body("{\"key\":\"someKey\"}")
             .contentType("application/json")
         .when()
@@ -68,7 +69,7 @@ class ApiTest {
     @Test
     void testSetFailsWithEmptyKey() {
         given()
-            .baseUri("http://localhost:8080/")
+            .baseUri(baseApplicationURI)
             .body("{\"key\":\"\"}")
             .contentType("application/json")
         .when()
@@ -80,7 +81,7 @@ class ApiTest {
     @Test
     void testValidSet() {
         given()
-            .baseUri("http://localhost:8080/")
+            .baseUri(baseApplicationURI)
             .body("{\"key\": \"test_key\", \"value\":\"test_value\"}")
             .contentType("application/json")
         .when()
@@ -93,7 +94,7 @@ class ApiTest {
     void testValidGet() {
         // Set first
         given()
-            .baseUri("http://localhost:8080/")
+            .baseUri(baseApplicationURI)
             .body("{\"key\": \"test_key\", \"value\":\"test_value\"}")
             .contentType("application/json")
         .when()
@@ -102,7 +103,7 @@ class ApiTest {
             .statusCode(200);
 
         given()
-            .baseUri("http://localhost:8080/")
+            .baseUri(baseApplicationURI)
         .when()
             .get("/db/get?key=test_key")
         .then()
@@ -113,7 +114,7 @@ class ApiTest {
     @Test
     void testDeleteWithEmptyKey(){
         given()
-                .baseUri("http://localhost:8080/")
+                .baseUri(baseApplicationURI)
                 .queryParam("key", "")
         .when()
                 .delete("/db/del")
@@ -127,7 +128,7 @@ class ApiTest {
     void testDeleteWithNonExistentKey(){
 
         given()
-                .baseUri("http://localhost:8080/")
+                .baseUri(baseApplicationURI)
                 .queryParam("key", "testVal")
         .when()
                 .delete("/db/del")
@@ -139,7 +140,7 @@ class ApiTest {
     @Test
     void testDeleteWithExistentKey(){
         given()
-                .baseUri("http://localhost:8080/")
+                .baseUri(baseApplicationURI)
                 .body("{\"key\": \"test_key\", \"value\":\"test_value\"}")
                 .contentType("application/json")
         .when()
@@ -148,7 +149,7 @@ class ApiTest {
                 .statusCode(200);
 
         given()
-                .baseUri("http://localhost:8080/")
+                .baseUri(baseApplicationURI)
                 .queryParam("key", "test_key")
         .when()
                 .delete("/db/del")
@@ -159,7 +160,7 @@ class ApiTest {
     @Test
     void testGetAll(){
         given()
-                .baseUri("http://localhost:8080/")
+                .baseUri(baseApplicationURI)
 
         .when()
                 .get("/db/getAll")
@@ -172,7 +173,7 @@ class ApiTest {
     @Test
     void testGetDbSizeOfOne(){
         given()
-                .baseUri("http://localhost:8080/")
+                .baseUri(baseApplicationURI)
                 .body("{\"key\": \"test_key\", \"value\":\"test_value\"}")
                 .contentType("application/json")
         .when()
@@ -181,7 +182,7 @@ class ApiTest {
                 .statusCode(200);
 
         given()
-                .baseUri("http://localhost:8080/")
+                .baseUri(baseApplicationURI)
         .when()
                 .get("/db/getDbSize")
         .then()
@@ -192,7 +193,7 @@ class ApiTest {
     @Test
     void testGetMethodNotAllowedByPostRequest() {
         given()
-                .baseUri("http://localhost:8080/")
+                .baseUri(baseApplicationURI)
         .when()
                 .post("/db/get")
         .then()
@@ -203,7 +204,7 @@ class ApiTest {
     @Test
     void testResponseTime() {
         given()
-                .baseUri("http://localhost:8080/")
+                .baseUri(baseApplicationURI)
         .when()
                 .get("/db/getDbSize")
         .then()
@@ -215,7 +216,7 @@ class ApiTest {
     @Test
     void testSuccessResponseStructure() {
         given()
-                .baseUri("http://localhost:8080/")
+                .baseUri(baseApplicationURI)
                 .body("{\"key\": \"test_key\", \"value\": \"test_value\"}")
                 .contentType("application/json")
         .when()
